@@ -112,11 +112,6 @@ class B2BIntegrationTest extends BaseIntegration
         $this->assertNotEmpty($response->organization->organization_id);
     }
 
-    public function testMagicLinksLoginWithRealCredentials(): void
-    {
-        $this->markTestSkipped('TODO: Enable after registering redirect URLs in Stytch dashboard.');
-    }
-
     public function testSessionsGetJWKSWithRealCredentials(): void
     {
         if (!$this->shouldRunIntegrationTests()) {
