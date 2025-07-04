@@ -47,8 +47,8 @@ abstract class BaseIntegration extends TestCase
     protected function validCredentialsStytch(): Stytch
     {
         $config = [
-            'project_id' => $this->getRequiredEnv('PROJECT_ID'),
-            'secret' => $this->getRequiredEnv('SECRET'),
+            'project_id' => $this->getRequiredEnv('STYTCH_PROJECT_ID'),
+            'secret' => $this->getRequiredEnv('STYTCH_SECRET'),
             'env' => 'test',
         ];
         if ($this->getEnv('STYTCH_API_URL')) {

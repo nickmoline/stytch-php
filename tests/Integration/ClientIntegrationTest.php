@@ -67,7 +67,7 @@ class ClientIntegrationTest extends BaseIntegration
 
         $client = $this->validCredentialsStytch();
 
-        $this->assertEquals($this->getRequiredEnv('PROJECT_ID'), $client->b2c()->getProjectId());
+        $this->assertEquals($this->getRequiredEnv('STYTCH_PROJECT_ID'), $client->b2c()->getProjectId());
     }
 
     public function testClientCanMakeValidRequest(): void
