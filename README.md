@@ -115,6 +115,17 @@ if ($expiresAt->isPast()) {
 - `last_authenticated_at` - When authentication factor was last used
 - `bearer_token_expires_at` - When a bearer token expires
 
+**Implementation Details:**
+
+The library uses a `HasCarbonDates` trait to handle date parsing consistently across all object classes. This trait provides:
+
+- `parseDate(?string $date): ?Carbon` - Safely parse date strings to Carbon instances
+- `parseDates(array $dates): array` - Parse multiple date strings at once
+- `toDateString(?Carbon $date): ?string` - Convert Carbon instances back to ISO strings
+- `toDateStrings(array $dates): array` - Convert multiple Carbon instances at once
+
+This approach ensures consistent date handling and reduces code duplication throughout the library.
+
 #### B2B Response Format (Object-based)
 ```php
 $response = $stytch->b2b()->organizations->get('org_id');

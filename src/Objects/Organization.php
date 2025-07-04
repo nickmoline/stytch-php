@@ -3,9 +3,12 @@
 namespace Stytch\Objects;
 
 use Carbon\Carbon;
+use Stytch\Objects\Traits\HasCarbonDates;
 
 class Organization
 {
+    use HasCarbonDates;
+
     /**
      * @param array<string> $sso_jit_provisioning_allowed_connections
      * @param array<ActiveSSOConnection> $sso_active_connections
@@ -61,26 +64,26 @@ class Organization
             organization_logo_url: $data['organization_logo_url'],
             organization_slug: $data['organization_slug'],
             sso_jit_provisioning: $data['sso_jit_provisioning'],
-            sso_jit_provisioning_allowed_connections: $data['sso_jit_provisioning_allowed_connections'],
-            sso_active_connections: array_map(fn($conn) => ActiveSSOConnection::fromArray($conn), $data['sso_active_connections']),
-            email_allowed_domains: $data['email_allowed_domains'],
+            sso_jit_provisioning_allowed_connections: $data['sso_jit_provisioning_allowed_connections'] ?? [],
+            sso_active_connections: array_map(fn($conn) => ActiveSSOConnection::fromArray($conn), $data['sso_active_connections'] ?? []),
+            email_allowed_domains: $data['email_allowed_domains'] ?? [],
             email_jit_provisioning: $data['email_jit_provisioning'],
             email_invites: $data['email_invites'],
             auth_methods: $data['auth_methods'],
-            allowed_auth_methods: $data['allowed_auth_methods'],
+            allowed_auth_methods: $data['allowed_auth_methods'] ?? [],
             mfa_policy: $data['mfa_policy'],
-            rbac_email_implicit_role_assignments: array_map(fn($role) => EmailImplicitRoleAssignment::fromArray($role), $data['rbac_email_implicit_role_assignments']),
+            rbac_email_implicit_role_assignments: array_map(fn($role) => EmailImplicitRoleAssignment::fromArray($role), $data['rbac_email_implicit_role_assignments'] ?? []),
             mfa_methods: $data['mfa_methods'],
-            allowed_mfa_methods: $data['allowed_mfa_methods'],
+            allowed_mfa_methods: $data['allowed_mfa_methods'] ?? [],
             oauth_tenant_jit_provisioning: $data['oauth_tenant_jit_provisioning'],
-            claimed_email_domains: $data['claimed_email_domains'],
+            claimed_email_domains: $data['claimed_email_domains'] ?? [],
             first_party_connected_apps_allowed_type: $data['first_party_connected_apps_allowed_type'],
-            allowed_first_party_connected_apps: $data['allowed_first_party_connected_apps'],
+            allowed_first_party_connected_apps: $data['allowed_first_party_connected_apps'] ?? [],
             third_party_connected_apps_allowed_type: $data['third_party_connected_apps_allowed_type'],
-            allowed_third_party_connected_apps: $data['allowed_third_party_connected_apps'],
+            allowed_third_party_connected_apps: $data['allowed_third_party_connected_apps'] ?? [],
             trusted_metadata: $data['trusted_metadata'] ?? null,
-            created_at: isset($data['created_at']) ? Carbon::parse($data['created_at']) : null,
-            updated_at: isset($data['updated_at']) ? Carbon::parse($data['updated_at']) : null,
+            created_at: self::parseDate($data['created_at'] ?? null),
+            updated_at: self::parseDate($data['updated_at'] ?? null),
             sso_default_connection_id: $data['sso_default_connection_id'] ?? null,
             scim_active_connection: isset($data['scim_active_connection']) ? ActiveSCIMConnection::fromArray($data['scim_active_connection']) : null,
             allowed_oauth_tenants: $data['allowed_oauth_tenants'] ?? null,
@@ -116,8 +119,8 @@ class Organization
             'third_party_connected_apps_allowed_type' => $this->third_party_connected_apps_allowed_type,
             'allowed_third_party_connected_apps' => $this->allowed_third_party_connected_apps,
             'trusted_metadata' => $this->trusted_metadata,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'created_at' => self::toDateString($this->created_at),
+            'updated_at' => self::toDateString($this->updated_at),
             'sso_default_connection_id' => $this->sso_default_connection_id,
             'scim_active_connection' => $this->scim_active_connection?->toArray(),
             'allowed_oauth_tenants' => $this->allowed_oauth_tenants,
@@ -160,6 +163,8 @@ class ActiveSSOConnection
 
 class ActiveSCIMConnection
 {
+    use HasCarbonDates;
+
     public function __construct(
         public string $connection_id,
         public string $display_name,
@@ -176,7 +181,7 @@ class ActiveSCIMConnection
             connection_id: $data['connection_id'],
             display_name: $data['display_name'],
             bearer_token_last_four: $data['bearer_token_last_four'],
-            bearer_token_expires_at: isset($data['bearer_token_expires_at']) ? Carbon::parse($data['bearer_token_expires_at']) : null,
+            bearer_token_expires_at: self::parseDate($data['bearer_token_expires_at'] ?? null),
         );
     }
 
@@ -189,7 +194,7 @@ class ActiveSCIMConnection
             'connection_id' => $this->connection_id,
             'display_name' => $this->display_name,
             'bearer_token_last_four' => $this->bearer_token_last_four,
-            'bearer_token_expires_at' => $this->bearer_token_expires_at?->toISOString(),
+            'bearer_token_expires_at' => self::toDateString($this->bearer_token_expires_at),
         ];
     }
 }

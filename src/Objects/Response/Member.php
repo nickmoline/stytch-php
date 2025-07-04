@@ -3,9 +3,12 @@
 namespace Stytch\Objects\Response;
 
 use Carbon\Carbon;
+use Stytch\Objects\Traits\HasCarbonDates;
 
 class Member
 {
+    use HasCarbonDates;
+
     public string $member_id;
     public string $email_address;
     public ?string $name;

@@ -3,9 +3,12 @@
 namespace Stytch\Objects;
 
 use Carbon\Carbon;
+use Stytch\Objects\Traits\HasCarbonDates;
 
 class User
 {
+    use HasCarbonDates;
+
     /**
      * @param array<UsersEmail> $emails
      * @param array<UsersPhoneNumber> $phone_numbers
@@ -55,13 +58,13 @@ class User
             biometric_registrations: array_map(fn($reg) => BiometricRegistration::fromArray($reg), $data['biometric_registrations'] ?? []),
             is_locked: $data['is_locked'] ?? false,
             name: isset($data['name']) ? UsersName::fromArray($data['name']) : null,
-            created_at: isset($data['created_at']) ? Carbon::parse($data['created_at']) : null,
+            created_at: self::parseDate($data['created_at'] ?? null),
             password: isset($data['password']) ? UserPassword::fromArray($data['password']) : null,
             trusted_metadata: $data['trusted_metadata'] ?? null,
             untrusted_metadata: $data['untrusted_metadata'] ?? null,
             external_id: $data['external_id'] ?? null,
-            lock_created_at: isset($data['lock_created_at']) ? Carbon::parse($data['lock_created_at']) : null,
-            lock_expires_at: isset($data['lock_expires_at']) ? Carbon::parse($data['lock_expires_at']) : null,
+            lock_created_at: self::parseDate($data['lock_created_at'] ?? null),
+            lock_expires_at: self::parseDate($data['lock_expires_at'] ?? null),
         );
     }
 
@@ -87,7 +90,7 @@ class User
             $data['name'] = $this->name->toArray();
         }
         if ($this->created_at) {
-            $data['created_at'] = $this->created_at->toISOString();
+            $data['created_at'] = self::toDateString($this->created_at);
         }
         if ($this->password) {
             $data['password'] = $this->password->toArray();
@@ -102,10 +105,10 @@ class User
             $data['external_id'] = $this->external_id;
         }
         if ($this->lock_created_at) {
-            $data['lock_created_at'] = $this->lock_created_at->toISOString();
+            $data['lock_created_at'] = self::toDateString($this->lock_created_at);
         }
         if ($this->lock_expires_at) {
-            $data['lock_expires_at'] = $this->lock_expires_at->toISOString();
+            $data['lock_expires_at'] = self::toDateString($this->lock_expires_at);
         }
 
         return $data;

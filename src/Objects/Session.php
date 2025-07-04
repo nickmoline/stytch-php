@@ -3,9 +3,12 @@
 namespace Stytch\Objects;
 
 use Carbon\Carbon;
+use Stytch\Objects\Traits\HasCarbonDates;
 
 class Session
 {
+    use HasCarbonDates;
+
     /**
      * @param array<AuthenticationFactor> $authentication_factors
      * @param array<string> $roles
@@ -62,6 +65,8 @@ class Session
 
 class AuthenticationFactor
 {
+    use HasCarbonDates;
+
     /**
      * @param array<string, mixed>|null $email_factor
      * @param array<string, mixed>|null $phone_factor
@@ -120,9 +125,9 @@ class AuthenticationFactor
         return new self(
             type: $data['type'],
             delivery_method: $data['delivery_method'] ?? null,
-            last_authenticated_at: isset($data['last_authenticated_at']) ? Carbon::parse($data['last_authenticated_at']) : null,
-            created_at: isset($data['created_at']) ? Carbon::parse($data['created_at']) : null,
-            updated_at: isset($data['updated_at']) ? Carbon::parse($data['updated_at']) : null,
+            last_authenticated_at: self::parseDate($data['last_authenticated_at'] ?? null),
+            created_at: self::parseDate($data['created_at'] ?? null),
+            updated_at: self::parseDate($data['updated_at'] ?? null),
             email_factor: $data['email_factor'] ?? null,
             phone_factor: $data['phone_factor'] ?? null,
             google_oauth_factor: $data['google_oauth_factor'] ?? null,
@@ -154,9 +159,9 @@ class AuthenticationFactor
         return [
             'type' => $this->type,
             'delivery_method' => $this->delivery_method,
-            'last_authenticated_at' => $this->last_authenticated_at?->toISOString(),
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'last_authenticated_at' => self::toDateString($this->last_authenticated_at),
+            'created_at' => self::toDateString($this->created_at),
+            'updated_at' => self::toDateString($this->updated_at),
             'email_factor' => $this->email_factor,
             'phone_factor' => $this->phone_factor,
             'google_oauth_factor' => $this->google_oauth_factor,
