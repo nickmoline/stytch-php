@@ -44,6 +44,10 @@ jobs:
           memory_limit: 512M
         env:
           XDEBUG_MODE: coverage
+          PROJECT_ID: ${{ secrets.STYTCH_PROJECT_ID }}
+          SECRET: ${{ secrets.STYTCH_SECRET }}
+          STYTCH_API_URL: "https://test.stytch.com"
+          RUN_INTEGRATION_TESTS: true
 
 
 
