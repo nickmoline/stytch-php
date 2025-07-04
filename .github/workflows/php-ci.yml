@@ -29,18 +29,15 @@ jobs:
       - name: Static Analysis with PHPStan
         uses: php-actions/phpstan@v3
         with:
-          level: 6
+          level: 8
           path: src tests
-          php_version: 8.3
-          error_format: github
 
       - name: Run Unit Tests
         uses: php-actions/phpunit@v4
         with:
-          php_version: 8.3
-          php_extensions: xdebug
           coverage_clover: coverage.xml
           bootstrap: vendor/autoload.php
+          memory_limit: 256M
         env:
           XDEBUG_MODE: coverage
 
