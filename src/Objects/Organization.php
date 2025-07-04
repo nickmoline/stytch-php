@@ -2,6 +2,8 @@
 
 namespace Stytch\Objects;
 
+use Carbon\Carbon;
+
 class Organization
 {
     /**
@@ -41,8 +43,8 @@ class Organization
         public string $third_party_connected_apps_allowed_type,
         public array $allowed_third_party_connected_apps,
         public ?array $trusted_metadata = null,
-        public ?string $created_at = null,
-        public ?string $updated_at = null,
+        public ?Carbon $created_at = null,
+        public ?Carbon $updated_at = null,
         public ?string $sso_default_connection_id = null,
         public ?ActiveSCIMConnection $scim_active_connection = null,
         public ?array $allowed_oauth_tenants = null,
@@ -77,8 +79,8 @@ class Organization
             third_party_connected_apps_allowed_type: $data['third_party_connected_apps_allowed_type'],
             allowed_third_party_connected_apps: $data['allowed_third_party_connected_apps'],
             trusted_metadata: $data['trusted_metadata'] ?? null,
-            created_at: $data['created_at'] ?? null,
-            updated_at: $data['updated_at'] ?? null,
+            created_at: isset($data['created_at']) ? Carbon::parse($data['created_at']) : null,
+            updated_at: isset($data['updated_at']) ? Carbon::parse($data['updated_at']) : null,
             sso_default_connection_id: $data['sso_default_connection_id'] ?? null,
             scim_active_connection: isset($data['scim_active_connection']) ? ActiveSCIMConnection::fromArray($data['scim_active_connection']) : null,
             allowed_oauth_tenants: $data['allowed_oauth_tenants'] ?? null,
@@ -114,8 +116,8 @@ class Organization
             'third_party_connected_apps_allowed_type' => $this->third_party_connected_apps_allowed_type,
             'allowed_third_party_connected_apps' => $this->allowed_third_party_connected_apps,
             'trusted_metadata' => $this->trusted_metadata,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at?->toISOString(),
+            'updated_at' => $this->updated_at?->toISOString(),
             'sso_default_connection_id' => $this->sso_default_connection_id,
             'scim_active_connection' => $this->scim_active_connection?->toArray(),
             'allowed_oauth_tenants' => $this->allowed_oauth_tenants,
@@ -162,7 +164,7 @@ class ActiveSCIMConnection
         public string $connection_id,
         public string $display_name,
         public string $bearer_token_last_four,
-        public ?string $bearer_token_expires_at = null,
+        public ?Carbon $bearer_token_expires_at = null,
     ) {}
 
     /**
@@ -174,7 +176,7 @@ class ActiveSCIMConnection
             connection_id: $data['connection_id'],
             display_name: $data['display_name'],
             bearer_token_last_four: $data['bearer_token_last_four'],
-            bearer_token_expires_at: $data['bearer_token_expires_at'] ?? null,
+            bearer_token_expires_at: isset($data['bearer_token_expires_at']) ? Carbon::parse($data['bearer_token_expires_at']) : null,
         );
     }
 
@@ -187,7 +189,7 @@ class ActiveSCIMConnection
             'connection_id' => $this->connection_id,
             'display_name' => $this->display_name,
             'bearer_token_last_four' => $this->bearer_token_last_four,
-            'bearer_token_expires_at' => $this->bearer_token_expires_at,
+            'bearer_token_expires_at' => $this->bearer_token_expires_at?->toISOString(),
         ];
     }
 }

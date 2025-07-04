@@ -2,6 +2,8 @@
 
 namespace Stytch\Objects\Response;
 
+use Carbon\Carbon;
+
 class Member
 {
     public string $member_id;
@@ -31,8 +33,8 @@ class Member
     public array $oauth_providers;
     /** @var array<string, mixed> */
     public array $connected_apps;
-    public string $created_at;
-    public string $updated_at;
+    public Carbon $created_at;
+    public Carbon $updated_at;
 
     /**
      * @param array<string> $roles
@@ -64,8 +66,8 @@ class Member
         array $passwords,
         array $oauth_providers,
         array $connected_apps,
-        string $created_at,
-        string $updated_at,
+        Carbon $created_at,
+        Carbon $updated_at,
     ) {
         $this->member_id = $member_id;
         $this->email_address = $email_address;
@@ -113,8 +115,8 @@ class Member
             $data['passwords'],
             $data['oauth_providers'],
             $data['connected_apps'],
-            $data['created_at'],
-            $data['updated_at'],
+            Carbon::parse($data['created_at']),
+            Carbon::parse($data['updated_at']),
         );
     }
 
@@ -136,8 +138,8 @@ class Member
             'passwords' => $this->passwords,
             'oauth_providers' => $this->oauth_providers,
             'connected_apps' => $this->connected_apps,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at->toISOString(),
+            'updated_at' => $this->updated_at->toISOString(),
         ];
 
         if ($this->name !== null) {
