@@ -41,7 +41,7 @@ jobs:
           bootstrap: vendor/autoload.php
           php_version: 8.3
           php_extensions: xdebug
-          memory_limit: 256M
+          memory_limit: 512M
         env:
           XDEBUG_MODE: coverage
 
