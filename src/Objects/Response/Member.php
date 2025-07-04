@@ -24,29 +24,29 @@ class Member
     public ?string $external_id;
     public bool $is_breakglass;
     public ?string $default_mfa_method;
-    /** @var array<string, mixed> */
+    /** @var array<int, array<string, mixed>> */
     public array $emails;
-    /** @var array<string, mixed> */
+    /** @var array<int, array<string, mixed>> */
     public array $phone_numbers;
-    /** @var array<string, mixed> */
+    /** @var array<int, array<string, mixed>> */
     public array $totps;
-    /** @var array<string, mixed> */
+    /** @var array<int, array<string, mixed>> */
     public array $passwords;
-    /** @var array<string, mixed> */
+    /** @var array<int, array<string, mixed>> */
     public array $oauth_providers;
-    /** @var array<string, mixed> */
+    /** @var array<int, array<string, mixed>> */
     public array $connected_apps;
     public Carbon $created_at;
     public Carbon $updated_at;
 
     /**
      * @param array<string> $roles
-     * @param array<string, mixed> $emails
-     * @param array<string, mixed> $phone_numbers
-     * @param array<string, mixed> $totps
-     * @param array<string, mixed> $passwords
-     * @param array<string, mixed> $oauth_providers
-     * @param array<string, mixed> $connected_apps
+     * @param array<int, array<string, mixed>> $emails
+     * @param array<int, array<string, mixed>> $phone_numbers
+     * @param array<int, array<string, mixed>> $totps
+     * @param array<int, array<string, mixed>> $passwords
+     * @param array<int, array<string, mixed>> $oauth_providers
+     * @param array<int, array<string, mixed>> $connected_apps
      * @param array<string, mixed>|null $trusted_metadata
      * @param array<string, mixed>|null $untrusted_metadata
      */
