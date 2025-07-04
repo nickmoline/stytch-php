@@ -1,0 +1,47 @@
+name: PHP Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache Composer Dependencies
+        uses: actions/cache@v3
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+
+      - name: Install PHP and Composer Dependencies
+        uses: php-actions/composer@v6
+        with:
+          php_version: 8.3
+          php_extensions: xdebug pconv
+
+      - name: Static Analysis with PHPStan
+        uses: php-actions/phpstan@v3
+        with:
+          level: 6
+          path: src tests
+          php_version: 8.3
+          error_format: github
+
+      - name: Run Unit Tests
+        uses: php-actions/phpunit@v4
+        with:
+          php_version: 8.3
+          php_extensions: xdebug pconv
+          coverage_clover: coverage.xml
+
+
+
+
+

@@ -1,0 +1,262 @@
+{
+    "totals": { "errors": 0, "file_errors": 24 },
+    "files": {
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Client.php": {
+            "errors": 1,
+            "messages": [
+                {
+                    "message": "Property Stytch\\Shared\\Client::$headers type has no value type specified in iterable type array.",
+                    "line": 25,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/AuthenticationException.php": {
+            "errors": 1,
+            "messages": [
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\AuthenticationException::__construct() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 10,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/AuthorizationException.php": {
+            "errors": 1,
+            "messages": [
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\AuthorizationException::__construct() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 10,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/ClientError.php": {
+            "errors": 2,
+            "messages": [
+                {
+                    "message": "Property Stytch\\Shared\\Errors\\ClientError::$cause has no type specified.",
+                    "line": 8,
+                    "ignorable": true,
+                    "identifier": "missingType.property"
+                },
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\ClientError::__construct() has parameter $cause with no type specified.",
+                    "line": 10,
+                    "ignorable": true,
+                    "identifier": "missingType.parameter"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/InvalidTokenException.php": {
+            "errors": 1,
+            "messages": [
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\InvalidTokenException::__construct() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 10,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/MemberNotFoundException.php": {
+            "errors": 1,
+            "messages": [
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\MemberNotFoundException::__construct() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 10,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/OrganizationNotFoundException.php": {
+            "errors": 1,
+            "messages": [
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\OrganizationNotFoundException::__construct() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 10,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/RateLimitException.php": {
+            "errors": 1,
+            "messages": [
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\RateLimitException::__construct() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 10,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/RequestError.php": {
+            "errors": 2,
+            "messages": [
+                {
+                    "message": "Property Stytch\\Shared\\Errors\\RequestError::$request type has no value type specified in iterable type array.",
+                    "line": 7,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                },
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\RequestError::__construct() has parameter $request with no value type specified in iterable type array.",
+                    "line": 9,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/ResourceNotFoundException.php": {
+            "errors": 1,
+            "messages": [
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\ResourceNotFoundException::__construct() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 10,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/ServerException.php": {
+            "errors": 1,
+            "messages": [
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\ServerException::__construct() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 10,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/SessionNotFoundException.php": {
+            "errors": 1,
+            "messages": [
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\SessionNotFoundException::__construct() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 10,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/StytchError.php": {
+            "errors": 2,
+            "messages": [
+                {
+                    "message": "Property Stytch\\Shared\\Errors\\StytchError::$error_details type has no value type specified in iterable type array.",
+                    "line": 12,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                },
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\StytchError::__construct() has parameter $data with no value type specified in iterable type array.",
+                    "line": 14,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/StytchExceptionFactory.php": {
+            "errors": 2,
+            "messages": [
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\StytchExceptionFactory::createException() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 15,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                },
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\StytchExceptionFactory::createExceptionByStatusCode() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 80,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/StytchRequestException.php": {
+            "errors": 2,
+            "messages": [
+                {
+                    "message": "Property Stytch\\Shared\\Errors\\StytchRequestException::$errorData type has no value type specified in iterable type array.",
+                    "line": 16,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                },
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\StytchRequestException::__construct() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 18,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/UserNotFoundException.php": {
+            "errors": 1,
+            "messages": [
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\UserNotFoundException::__construct() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 10,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/Errors/ValidationException.php": {
+            "errors": 1,
+            "messages": [
+                {
+                    "message": "Method Stytch\\Shared\\Errors\\ValidationException::__construct() has parameter $errorData with no value type specified in iterable type array.",
+                    "line": 10,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        },
+        "/Users/nick/workspace/libraries/stytch-php/src/Shared/MethodOptions.php": {
+            "errors": 2,
+            "messages": [
+                {
+                    "message": "Method Stytch\\Shared\\MethodOptions::__construct() has parameter $options with no value type specified in iterable type array.",
+                    "line": 10,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                },
+                {
+                    "message": "Method Stytch\\Shared\\MethodOptions::addAuthorizationHeaders() has parameter $headers with no value type specified in iterable type array.",
+                    "line": 16,
+                    "ignorable": true,
+                    "tip": "See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type",
+                    "identifier": "missingType.iterableValue"
+                }
+            ]
+        }
+    },
+    "errors": []
+}
