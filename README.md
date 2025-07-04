@@ -10,7 +10,7 @@ composer require nickmoline/stytch-php
 
 ## Requirements
 
-- PHP 8.0 or higher
+- PHP 8.2 or higher
 - Guzzle HTTP Client
 - PSR-7 compatible HTTP messages
 
@@ -73,6 +73,23 @@ This library currently supports the following B2C features:
 ### Object-Based Responses
 
 The library returns proper PHP objects instead of raw arrays, providing better type safety and IDE support. All responses include a `request_id` and `status_code` for debugging purposes.
+
+**Note:** B2B responses return structured objects, while B2C responses return arrays. This difference reflects the underlying API structure.
+
+#### B2B Response Format (Object-based)
+```php
+$response = $stytch->b2b()->organizations->get('org_id');
+$organization = $response->organization; // Object
+echo $organization->organization_name; // Property access
+echo $response->request_id; // Debug info
+```
+
+#### B2C Response Format (Array-based)
+```php
+$response = $stytch->b2c()->users->get('user_id');
+echo $response['user_id']; // Array access
+echo $response['emails'][0]['email']; // Nested array access
+```
 
 ### B2B Examples
 
@@ -334,6 +351,34 @@ $result = $stytch->b2b()->discovery->organizations->create([
 ]);
 ```
 
+#### Discovery - Get Organization
+
+```php
+$result = $stytch->b2b()->discovery->organizations->get([
+    'intermediate_session_token' => 'token_here',
+    'organization_id' => 'org_1234567890abcdef',
+]);
+```
+
+#### Discovery - Update Organization
+
+```php
+$result = $stytch->b2b()->discovery->organizations->update([
+    'intermediate_session_token' => 'token_here',
+    'organization_id' => 'org_1234567890abcdef',
+    'organization_name' => 'Updated Organization Name',
+]);
+```
+
+#### Discovery - Delete Organization
+
+```php
+$result = $stytch->b2b()->discovery->organizations->delete([
+    'intermediate_session_token' => 'token_here',
+    'organization_id' => 'org_1234567890abcdef',
+]);
+```
+
 #### SSO Authentication
 
 ```php
@@ -386,7 +431,15 @@ $result = $stytch->b2b()->idp->introspectToken([
 ]);
 ```
 
-#### Impersonation
+#### IDP - Get Token
+
+```php
+$result = $stytch->b2b()->idp->getToken([
+    'token' => 'token_here',
+]);
+```
+
+#### Impersonation - Authenticate
 
 ```php
 $result = $stytch->b2b()->impersonation->authenticate([
@@ -398,6 +451,29 @@ $result = $stytch->b2b()->impersonation->authenticate([
 
 ```php
 $result = $stytch->b2b()->rbac->policy();
+```
+
+#### RBAC - Get Policy
+
+```php
+$result = $stytch->b2b()->rbac->policy();
+```
+
+#### RBAC - Get Role
+
+```php
+$result = $stytch->b2b()->rbac->getRole([
+    'organization_id' => 'org_1234567890abcdef',
+    'role_id' => 'role_1234567890abcdef',
+]);
+```
+
+#### RBAC - List Roles
+
+```php
+$result = $stytch->b2b()->rbac->listRoles([
+    'organization_id' => 'org_1234567890abcdef',
+]);
 ```
 
 ### B2C Examples
@@ -621,15 +697,134 @@ $result = $stytch->b2c()->fraud->signal([
 ]);
 ```
 
+#### M2M (Machine-to-Machine) Authentication
+
+```php
+// Create M2M client
+$response = $stytch->b2c()->m2m->clients->create([
+    'client_name' => 'My M2M Client',
+    'client_description' => 'Client for automated API access',
+    'scopes' => ['read:users', 'write:data'],
+]);
+
+// Get M2M client
+$client = $stytch->b2c()->m2m->clients->get('client_1234567890abcdef');
+
+// Search M2M clients
+$clients = $stytch->b2c()->m2m->clients->search([
+    'limit' => 10,
+]);
+
+// Authenticate M2M token
+$response = $stytch->b2c()->m2m->authenticate([
+    'access_token' => 'm2m_token_here',
+]);
+
+// Authenticate with claims
+$response = $stytch->b2c()->m2m->authenticateWithClaims([
+    'access_token' => 'm2m_token_here',
+]);
+```
+
+#### User Attributes
+
+```php
+// Get user attributes
+$attributes = $stytch->b2c()->attribute->get([
+    'user_id' => 'user_1234567890abcdef',
+]);
+
+// Set user attributes
+$result = $stytch->b2c()->attribute->set([
+    'user_id' => 'user_1234567890abcdef',
+    'attributes' => [
+        'preferences' => ['theme' => 'dark', 'language' => 'en'],
+        'profile' => ['bio' => 'Software developer'],
+    ],
+]);
+```
+
+#### Project Management
+
+```php
+// Get project information
+$project = $stytch->b2c()->project->get();
+
+// Update project settings
+$result = $stytch->b2c()->project->update([
+    'project_name' => 'Updated Project Name',
+    'trusted_metadata' => ['environment' => 'production'],
+]);
+```
+
+#### WhatsApp OTP
+
+```php
+// Send WhatsApp OTP
+$result = $stytch->b2c()->otps->whatsapp->send([
+    'phone_number' => '+1234567890',
+]);
+
+// Authenticate WhatsApp OTP
+$result = $stytch->b2c()->otps->whatsapp->authenticate([
+    'method_id' => 'phone_id_here',
+    'code' => '123456',
+]);
+```
+
 ## Error Handling
 
-The library throws exceptions for API errors:
+The library throws specific exceptions for different types of errors:
+
+### StytchRequestException
+For API errors with detailed error information:
 
 ```php
 try {
     $organization = $stytch->b2b()->organizations->get('invalid-id');
+} catch (Stytch\Shared\Errors\StytchRequestException $e) {
+    echo 'Error Type: ' . $e->getErrorType();
+    echo 'Error Message: ' . $e->getErrorMessage();
+    echo 'Request ID: ' . $e->getRequestId();
+    echo 'Status Code: ' . $e->getStatusCode();
+    echo 'Error URL: ' . $e->getErrorUrl();
+    
+    // Check specific error types
+    if ($e->isOrganizationNotFound()) {
+        echo 'Organization not found';
+    } elseif ($e->isAuthenticationError()) {
+        echo 'Authentication failed';
+    } elseif ($e->isValidationError()) {
+        echo 'Validation error';
+    }
+}
+```
+
+### Specific Exception Types
+The library provides specific exceptions for common errors:
+
+```php
+try {
+    $member = $stytch->b2b()->members->get('invalid-member-id');
+} catch (Stytch\Shared\Errors\MemberNotFoundException $e) {
+    echo 'Member not found: ' . $e->getMessage();
+} catch (Stytch\Shared\Errors\OrganizationNotFoundException $e) {
+    echo 'Organization not found: ' . $e->getMessage();
+} catch (Stytch\Shared\Errors\RateLimitException $e) {
+    echo 'Rate limit exceeded: ' . $e->getMessage();
+}
+```
+
+### Network and Connection Errors
+For network-related errors:
+
+```php
+try {
+    $response = $stytch->b2b()->organizations->get('org_id');
 } catch (\RuntimeException $e) {
-    echo 'API Error: ' . $e->getMessage();
+    echo 'Network error: ' . $e->getMessage();
+} catch (\InvalidArgumentException $e) {
+    echo 'Invalid argument: ' . $e->getMessage();
 }
 ```
 
@@ -642,6 +837,38 @@ try {
 | `env` | string | No | Environment (auto-detected from project_id) |
 | `timeout` | int | No | Request timeout in seconds (default: 600) |
 | `custom_base_url` | string | No | Custom base URL for requests |
+
+### Environment Configuration
+
+The library automatically detects the environment based on your project ID:
+
+```php
+// Test environment (project-test-*)
+$stytch = new Stytch([
+    'project_id' => 'project-test-1234567890abcdef',
+    'secret' => 'secret-test-1234567890abcdef',
+]);
+// Uses: https://test.stytch.com/
+
+// Live environment (project-live-*)
+$stytch = new Stytch([
+    'project_id' => 'project-live-1234567890abcdef',
+    'secret' => 'secret-live-1234567890abcdef',
+]);
+// Uses: https://api.stytch.com/
+```
+
+### Custom Configuration
+
+```php
+// Custom timeout and base URL
+$stytch = new Stytch([
+    'project_id' => 'project-test-1234567890abcdef',
+    'secret' => 'secret-test-1234567890abcdef',
+    'timeout' => 300, // 5 minutes
+    'custom_base_url' => 'https://custom-api.example.com',
+]);
+```
 
 ## Development
 
