@@ -2,8 +2,13 @@
 
 namespace Stytch\Objects;
 
+use Carbon\Carbon;
+use Stytch\Objects\Traits\HasCarbonDates;
+
 class Session
 {
+    use HasCarbonDates;
+
     /**
      * @param array<AuthenticationFactor> $authentication_factors
      * @param array<string> $roles
@@ -12,9 +17,9 @@ class Session
     public function __construct(
         public string $member_session_id,
         public string $member_id,
-        public string $started_at,
-        public string $last_accessed_at,
-        public string $expires_at,
+        public Carbon $started_at,
+        public Carbon $last_accessed_at,
+        public Carbon $expires_at,
         public array $authentication_factors,
         public string $organization_id,
         public array $roles,
@@ -29,9 +34,9 @@ class Session
         return new self(
             member_session_id: $data['member_session_id'],
             member_id: $data['member_id'],
-            started_at: $data['started_at'],
-            last_accessed_at: $data['last_accessed_at'],
-            expires_at: $data['expires_at'],
+            started_at: Carbon::parse($data['started_at']),
+            last_accessed_at: Carbon::parse($data['last_accessed_at']),
+            expires_at: Carbon::parse($data['expires_at']),
             authentication_factors: array_map(fn($factor) => AuthenticationFactor::fromArray($factor), $data['authentication_factors']),
             organization_id: $data['organization_id'],
             roles: $data['roles'],
@@ -47,9 +52,9 @@ class Session
         return [
             'member_session_id' => $this->member_session_id,
             'member_id' => $this->member_id,
-            'started_at' => $this->started_at,
-            'last_accessed_at' => $this->last_accessed_at,
-            'expires_at' => $this->expires_at,
+            'started_at' => $this->started_at->toISOString(),
+            'last_accessed_at' => $this->last_accessed_at->toISOString(),
+            'expires_at' => $this->expires_at->toISOString(),
             'authentication_factors' => array_map(fn($factor) => $factor->toArray(), $this->authentication_factors),
             'organization_id' => $this->organization_id,
             'roles' => $this->roles,
@@ -60,6 +65,8 @@ class Session
 
 class AuthenticationFactor
 {
+    use HasCarbonDates;
+
     /**
      * @param array<string, mixed>|null $email_factor
      * @param array<string, mixed>|null $phone_factor
@@ -85,9 +92,9 @@ class AuthenticationFactor
     public function __construct(
         public string $type,
         public ?string $delivery_method = null,
-        public ?string $last_authenticated_at = null,
-        public ?string $created_at = null,
-        public ?string $updated_at = null,
+        public ?Carbon $last_authenticated_at = null,
+        public ?Carbon $created_at = null,
+        public ?Carbon $updated_at = null,
         public ?array $email_factor = null,
         public ?array $phone_factor = null,
         public ?array $google_oauth_factor = null,
@@ -118,9 +125,9 @@ class AuthenticationFactor
         return new self(
             type: $data['type'],
             delivery_method: $data['delivery_method'] ?? null,
-            last_authenticated_at: $data['last_authenticated_at'] ?? null,
-            created_at: $data['created_at'] ?? null,
-            updated_at: $data['updated_at'] ?? null,
+            last_authenticated_at: self::parseDate($data['last_authenticated_at'] ?? null),
+            created_at: self::parseDate($data['created_at'] ?? null),
+            updated_at: self::parseDate($data['updated_at'] ?? null),
             email_factor: $data['email_factor'] ?? null,
             phone_factor: $data['phone_factor'] ?? null,
             google_oauth_factor: $data['google_oauth_factor'] ?? null,
@@ -152,9 +159,9 @@ class AuthenticationFactor
         return [
             'type' => $this->type,
             'delivery_method' => $this->delivery_method,
-            'last_authenticated_at' => $this->last_authenticated_at,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'last_authenticated_at' => self::toDateString($this->last_authenticated_at),
+            'created_at' => self::toDateString($this->created_at),
+            'updated_at' => self::toDateString($this->updated_at),
             'email_factor' => $this->email_factor,
             'phone_factor' => $this->phone_factor,
             'google_oauth_factor' => $this->google_oauth_factor,

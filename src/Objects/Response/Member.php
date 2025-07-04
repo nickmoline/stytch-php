@@ -2,8 +2,13 @@
 
 namespace Stytch\Objects\Response;
 
+use Carbon\Carbon;
+use Stytch\Objects\Traits\HasCarbonDates;
+
 class Member
 {
+    use HasCarbonDates;
+
     public string $member_id;
     public string $email_address;
     public ?string $name;
@@ -19,29 +24,29 @@ class Member
     public ?string $external_id;
     public bool $is_breakglass;
     public ?string $default_mfa_method;
-    /** @var array<string, mixed> */
+    /** @var array<int, array<string, mixed>> */
     public array $emails;
-    /** @var array<string, mixed> */
+    /** @var array<int, array<string, mixed>> */
     public array $phone_numbers;
-    /** @var array<string, mixed> */
+    /** @var array<int, array<string, mixed>> */
     public array $totps;
-    /** @var array<string, mixed> */
+    /** @var array<int, array<string, mixed>> */
     public array $passwords;
-    /** @var array<string, mixed> */
+    /** @var array<int, array<string, mixed>> */
     public array $oauth_providers;
-    /** @var array<string, mixed> */
+    /** @var array<int, array<string, mixed>> */
     public array $connected_apps;
-    public string $created_at;
-    public string $updated_at;
+    public Carbon $created_at;
+    public Carbon $updated_at;
 
     /**
      * @param array<string> $roles
-     * @param array<string, mixed> $emails
-     * @param array<string, mixed> $phone_numbers
-     * @param array<string, mixed> $totps
-     * @param array<string, mixed> $passwords
-     * @param array<string, mixed> $oauth_providers
-     * @param array<string, mixed> $connected_apps
+     * @param array<int, array<string, mixed>> $emails
+     * @param array<int, array<string, mixed>> $phone_numbers
+     * @param array<int, array<string, mixed>> $totps
+     * @param array<int, array<string, mixed>> $passwords
+     * @param array<int, array<string, mixed>> $oauth_providers
+     * @param array<int, array<string, mixed>> $connected_apps
      * @param array<string, mixed>|null $trusted_metadata
      * @param array<string, mixed>|null $untrusted_metadata
      */
@@ -64,8 +69,8 @@ class Member
         array $passwords,
         array $oauth_providers,
         array $connected_apps,
-        string $created_at,
-        string $updated_at,
+        Carbon $created_at,
+        Carbon $updated_at,
     ) {
         $this->member_id = $member_id;
         $this->email_address = $email_address;
@@ -113,8 +118,8 @@ class Member
             $data['passwords'],
             $data['oauth_providers'],
             $data['connected_apps'],
-            $data['created_at'],
-            $data['updated_at'],
+            Carbon::parse($data['created_at']),
+            Carbon::parse($data['updated_at']),
         );
     }
 
@@ -136,8 +141,8 @@ class Member
             'passwords' => $this->passwords,
             'oauth_providers' => $this->oauth_providers,
             'connected_apps' => $this->connected_apps,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at->toISOString(),
+            'updated_at' => $this->updated_at->toISOString(),
         ];
 
         if ($this->name !== null) {

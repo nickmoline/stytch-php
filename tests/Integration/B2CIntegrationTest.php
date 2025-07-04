@@ -156,11 +156,4 @@ class B2CIntegrationTest extends BaseIntegration
         }
     }
 
-    /**
-     * @todo Enable this test after ensuring the redirect URLs are registered in the Stytch dashboard.
-     */
-    public function testMagicLinksEmailLoginOrCreateWithRealCredentials(): void
-    {
-        $this->markTestSkipped('TODO: Enable after registering redirect URLs in Stytch dashboard.');
-    }
 }

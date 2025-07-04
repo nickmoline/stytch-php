@@ -2,8 +2,13 @@
 
 namespace Stytch\Objects;
 
+use Carbon\Carbon;
+use Stytch\Objects\Traits\HasCarbonDates;
+
 class Member
 {
+    use HasCarbonDates;
+
     /**
      * @param array<SSORegistration> $sso_registrations
      * @param array<OAuthRegistration> $oauth_registrations
@@ -34,12 +39,12 @@ class Member
         public array $roles,
         public ?array $trusted_metadata = null,
         public ?array $untrusted_metadata = null,
-        public ?string $created_at = null,
-        public ?string $updated_at = null,
+        public ?Carbon $created_at = null,
+        public ?Carbon $updated_at = null,
         public ?SCIMRegistration $scim_registration = null,
         public ?string $external_id = null,
-        public ?string $lock_created_at = null,
-        public ?string $lock_expires_at = null,
+        public ?Carbon $lock_created_at = null,
+        public ?Carbon $lock_expires_at = null,
     ) {}
 
     /**
@@ -69,12 +74,12 @@ class Member
             roles: array_map(fn($role) => MemberRole::fromArray($role), $data['roles']),
             trusted_metadata: $data['trusted_metadata'] ?? null,
             untrusted_metadata: $data['untrusted_metadata'] ?? null,
-            created_at: $data['created_at'] ?? null,
-            updated_at: $data['updated_at'] ?? null,
+            created_at: self::parseDate($data['created_at'] ?? null),
+            updated_at: self::parseDate($data['updated_at'] ?? null),
             scim_registration: isset($data['scim_registration']) ? SCIMRegistration::fromArray($data['scim_registration']) : null,
             external_id: $data['external_id'] ?? null,
-            lock_created_at: $data['lock_created_at'] ?? null,
-            lock_expires_at: $data['lock_expires_at'] ?? null,
+            lock_created_at: self::parseDate($data['lock_created_at'] ?? null),
+            lock_expires_at: self::parseDate($data['lock_expires_at'] ?? null),
         );
     }
 
@@ -105,12 +110,12 @@ class Member
             'roles' => array_map(fn($role) => $role->toArray(), $this->roles),
             'trusted_metadata' => $this->trusted_metadata,
             'untrusted_metadata' => $this->untrusted_metadata,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => self::toDateString($this->created_at),
+            'updated_at' => self::toDateString($this->updated_at),
             'scim_registration' => $this->scim_registration?->toArray(),
             'external_id' => $this->external_id,
-            'lock_created_at' => $this->lock_created_at,
-            'lock_expires_at' => $this->lock_expires_at,
+            'lock_created_at' => self::toDateString($this->lock_created_at),
+            'lock_expires_at' => self::toDateString($this->lock_expires_at),
         ];
     }
 }

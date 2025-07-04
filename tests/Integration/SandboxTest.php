@@ -64,22 +64,6 @@ class SandboxTest extends BaseIntegration
         ]);
     }
 
-    /**
-     * @todo Enable this test after ensuring the redirect URLs are registered in the Stytch dashboard.
-     */
-    public function testMagicLinksEmailLoginOrCreate(): void
-    {
-        $this->markTestSkipped('TODO: Enable after registering redirect URLs in Stytch dashboard.');
-    }
-
-    /**
-     * @todo Enable this test after ensuring the invite redirect URLs are registered in the Stytch dashboard.
-     */
-    public function testMagicLinksEmailInvite(): void
-    {
-        $this->markTestSkipped('TODO: Enable after registering invite redirect URLs in Stytch dashboard.');
-    }
-
     public function testMagicLinksEmailRevokeInvite(): void
     {
         if (!$this->shouldRunIntegrationTests()) {

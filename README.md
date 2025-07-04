@@ -76,6 +76,56 @@ The library returns proper PHP objects instead of raw arrays, providing better t
 
 **Note:** B2B responses return structured objects, while B2C responses return arrays. This difference reflects the underlying API structure.
 
+#### Carbon Date Handling
+
+All date and time fields from the Stytch API are automatically converted to [Carbon](https://carbon.nesbot.com/) instances, providing rich date manipulation capabilities:
+
+```php
+$response = $stytch->b2b()->organizations->get('org_id');
+$organization = $response->organization;
+
+// Access Carbon instances for date fields
+$createdAt = $organization->created_at; // Carbon instance
+$updatedAt = $organization->updated_at; // Carbon instance
+
+// Use Carbon's rich date manipulation
+echo $createdAt->format('Y-m-d H:i:s'); // "2023-01-01 12:00:00"
+echo $createdAt->diffForHumans(); // "2 days ago"
+echo $createdAt->isToday(); // true/false
+echo $createdAt->addDays(7)->format('Y-m-d'); // Add 7 days
+
+// Session expiration handling
+$session = $response->member_session;
+$expiresAt = $session->expires_at; // Carbon instance
+if ($expiresAt->isPast()) {
+    echo "Session has expired";
+} else {
+    echo "Session expires in " . $expiresAt->diffForHumans();
+}
+```
+
+**Available Carbon date fields:**
+- `created_at` - When the resource was created
+- `updated_at` - When the resource was last updated
+- `expires_at` - When a session or token expires
+- `started_at` - When a session started
+- `last_accessed_at` - When a session was last accessed
+- `lock_created_at` - When a user/member lock was created
+- `lock_expires_at` - When a user/member lock expires
+- `last_authenticated_at` - When authentication factor was last used
+- `bearer_token_expires_at` - When a bearer token expires
+
+**Implementation Details:**
+
+The library uses a `HasCarbonDates` trait to handle date parsing consistently across all object classes. This trait provides:
+
+- `parseDate(?string $date): ?Carbon` - Safely parse date strings to Carbon instances
+- `parseDates(array $dates): array` - Parse multiple date strings at once
+- `toDateString(?Carbon $date): ?string` - Convert Carbon instances back to ISO strings
+- `toDateStrings(array $dates): array` - Convert multiple Carbon instances at once
+
+This approach ensures consistent date handling and reduces code duplication throughout the library.
+
 #### B2B Response Format (Object-based)
 ```php
 $response = $stytch->b2b()->organizations->get('org_id');
@@ -452,428 +502,3 @@ $result = $stytch->b2b()->impersonation->authenticate([
 ```php
 $result = $stytch->b2b()->rbac->policy();
 ```
-
-#### RBAC - Get Policy
-
-```php
-$result = $stytch->b2b()->rbac->policy();
-```
-
-#### RBAC - Get Role
-
-```php
-$result = $stytch->b2b()->rbac->getRole([
-    'organization_id' => 'org_1234567890abcdef',
-    'role_id' => 'role_1234567890abcdef',
-]);
-```
-
-#### RBAC - List Roles
-
-```php
-$result = $stytch->b2b()->rbac->listRoles([
-    'organization_id' => 'org_1234567890abcdef',
-]);
-```
-
-### B2C Examples
-
-#### Create a User
-
-```php
-$response = $stytch->b2c()->users->create([
-    'email' => 'user@example.com',
-    'name' => [
-        'first_name' => 'John',
-        'last_name' => 'Doe'
-    ]
-]);
-
-echo $response['user_id'];
-echo $response['email_id'];
-echo $response['status'];
-```
-
-#### Get a User
-
-```php
-$response = $stytch->b2c()->users->get('user_1234567890abcdef');
-
-$user = $response;
-echo $user['user_id'];
-echo $user['emails'][0]['email'];
-echo $user['status'];
-```
-
-#### Search Users
-
-```php
-$response = $stytch->b2c()->users->search([
-    'limit' => 10,
-    'query' => [
-        'operator' => 'AND',
-        'operands' => [
-            [
-                'filter_name' => 'email_address',
-                'filter_value' => ['user@example.com']
-            ]
-        ]
-    ]
-]);
-
-foreach ($response['results'] as $user) {
-    echo $user['user_id'];
-    echo $user['emails'][0]['email'];
-}
-```
-
-#### Send Magic Link Email
-
-```php
-$result = $stytch->b2c()->magicLinks->email->loginOrCreate([
-    'email' => 'user@example.com',
-    'login_magic_link_url' => 'https://example.com/authenticate',
-    'signup_magic_link_url' => 'https://example.com/authenticate',
-]);
-```
-
-#### Authenticate Magic Link
-
-```php
-$response = $stytch->b2c()->magicLinks->authenticate([
-    'token' => 'DOYoip3rvIMMW5lgItikFK-Ak1CfMsgjuiCyI7uuU94=',
-]);
-
-echo $response['user_id'];
-echo $response['session_token'];
-echo $response['session_jwt'];
-echo $response['user']['emails'][0]['email'];
-```
-
-#### Password Authentication
-
-```php
-$response = $stytch->b2c()->passwords->authenticate([
-    'email' => 'user@example.com',
-    'password' => 'user_password',
-]);
-
-echo $response['user_id'];
-echo $response['session_token'];
-echo $response['session_jwt'];
-```
-
-#### Create User with Password
-
-```php
-$response = $stytch->b2c()->passwords->create([
-    'email' => 'user@example.com',
-    'password' => 'secure_password',
-    'name' => [
-        'first_name' => 'John',
-        'last_name' => 'Doe'
-    ]
-]);
-
-echo $response['user_id'];
-echo $response['session_token'];
-```
-
-#### Send SMS OTP
-
-```php
-$result = $stytch->b2c()->otps->sms->send([
-    'phone_number' => '+1234567890',
-]);
-```
-
-#### Authenticate SMS OTP
-
-```php
-$result = $stytch->b2c()->otps->authenticate([
-    'method_id' => 'phone_id_here',
-    'code' => '123456',
-]);
-```
-
-#### Send Email OTP
-
-```php
-$result = $stytch->b2c()->otps->email->send([
-    'email' => 'user@example.com',
-]);
-```
-
-#### Create TOTP
-
-```php
-$result = $stytch->b2c()->totps->create([
-    'user_id' => 'user_1234567890abcdef',
-]);
-```
-
-#### Authenticate TOTP
-
-```php
-$result = $stytch->b2c()->totps->authenticate([
-    'user_id' => 'user_1234567890abcdef',
-    'totp_id' => 'totp_1234567890abcdef',
-    'code' => '123456',
-]);
-```
-
-#### WebAuthn Registration
-
-```php
-$result = $stytch->b2c()->webauthn->registerStart([
-    'user_id' => 'user_1234567890abcdef',
-    'domain' => 'example.com',
-]);
-```
-
-#### WebAuthn Authentication
-
-```php
-$result = $stytch->b2c()->webauthn->authenticateStart([
-    'user_id' => 'user_1234567890abcdef',
-]);
-```
-
-#### OAuth Start
-
-```php
-$result = $stytch->b2c()->oauth->start([
-    'provider' => 'google',
-    'login_redirect_url' => 'https://example.com/authenticate',
-    'signup_redirect_url' => 'https://example.com/authenticate',
-]);
-```
-
-#### OAuth Authenticate
-
-```php
-$result = $stytch->b2c()->oauth->authenticate([
-    'token' => 'oauth_token_here',
-]);
-```
-
-#### Session Management
-
-```php
-// Authenticate session
-$response = $stytch->b2c()->sessions->authenticate([
-    'session_token' => 'session_token_here',
-]);
-
-// Get user sessions
-$sessions = $stytch->b2c()->sessions->get([
-    'user_id' => 'user_1234567890abcdef',
-]);
-
-// Revoke session
-$result = $stytch->b2c()->sessions->revoke([
-    'session_id' => 'session_1234567890abcdef',
-]);
-```
-
-#### Crypto Wallet Authentication
-
-```php
-$result = $stytch->b2c()->cryptoWallets->authenticateStart([
-    'user_id' => 'user_1234567890abcdef',
-    'crypto_wallet_type' => 'ethereum',
-    'crypto_wallet_address' => '0x1234567890abcdef',
-]);
-```
-
-#### Fraud Detection
-
-```php
-$result = $stytch->b2c()->fraud->signal([
-    'user_id' => 'user_1234567890abcdef',
-    'event_type' => 'login',
-    'ip_address' => '192.168.1.1',
-    'user_agent' => 'Mozilla/5.0...',
-]);
-```
-
-#### M2M (Machine-to-Machine) Authentication
-
-```php
-// Create M2M client
-$response = $stytch->b2c()->m2m->clients->create([
-    'client_name' => 'My M2M Client',
-    'client_description' => 'Client for automated API access',
-    'scopes' => ['read:users', 'write:data'],
-]);
-
-// Get M2M client
-$client = $stytch->b2c()->m2m->clients->get('client_1234567890abcdef');
-
-// Search M2M clients
-$clients = $stytch->b2c()->m2m->clients->search([
-    'limit' => 10,
-]);
-
-// Authenticate M2M token
-$response = $stytch->b2c()->m2m->authenticate([
-    'access_token' => 'm2m_token_here',
-]);
-
-// Authenticate with claims
-$response = $stytch->b2c()->m2m->authenticateWithClaims([
-    'access_token' => 'm2m_token_here',
-]);
-```
-
-#### User Attributes
-
-```php
-// Get user attributes
-$attributes = $stytch->b2c()->attribute->get([
-    'user_id' => 'user_1234567890abcdef',
-]);
-
-// Set user attributes
-$result = $stytch->b2c()->attribute->set([
-    'user_id' => 'user_1234567890abcdef',
-    'attributes' => [
-        'preferences' => ['theme' => 'dark', 'language' => 'en'],
-        'profile' => ['bio' => 'Software developer'],
-    ],
-]);
-```
-
-#### Project Management
-
-```php
-// Get project information
-$project = $stytch->b2c()->project->get();
-
-// Update project settings
-$result = $stytch->b2c()->project->update([
-    'project_name' => 'Updated Project Name',
-    'trusted_metadata' => ['environment' => 'production'],
-]);
-```
-
-#### WhatsApp OTP
-
-```php
-// Send WhatsApp OTP
-$result = $stytch->b2c()->otps->whatsapp->send([
-    'phone_number' => '+1234567890',
-]);
-
-// Authenticate WhatsApp OTP
-$result = $stytch->b2c()->otps->whatsapp->authenticate([
-    'method_id' => 'phone_id_here',
-    'code' => '123456',
-]);
-```
-
-## Error Handling
-
-The library throws specific exceptions for different types of errors:
-
-### StytchRequestException
-For API errors with detailed error information:
-
-```php
-try {
-    $organization = $stytch->b2b()->organizations->get('invalid-id');
-} catch (Stytch\Shared\Errors\StytchRequestException $e) {
-    echo 'Error Type: ' . $e->getErrorType();
-    echo 'Error Message: ' . $e->getErrorMessage();
-    echo 'Request ID: ' . $e->getRequestId();
-    echo 'Status Code: ' . $e->getStatusCode();
-    echo 'Error URL: ' . $e->getErrorUrl();
-    
-    // Check specific error types
-    if ($e->isOrganizationNotFound()) {
-        echo 'Organization not found';
-    } elseif ($e->isAuthenticationError()) {
-        echo 'Authentication failed';
-    } elseif ($e->isValidationError()) {
-        echo 'Validation error';
-    }
-}
-```
-
-### Specific Exception Types
-The library provides specific exceptions for common errors:
-
-```php
-try {
-    $member = $stytch->b2b()->members->get('invalid-member-id');
-} catch (Stytch\Shared\Errors\MemberNotFoundException $e) {
-    echo 'Member not found: ' . $e->getMessage();
-} catch (Stytch\Shared\Errors\OrganizationNotFoundException $e) {
-    echo 'Organization not found: ' . $e->getMessage();
-} catch (Stytch\Shared\Errors\RateLimitException $e) {
-    echo 'Rate limit exceeded: ' . $e->getMessage();
-}
-```
-
-### Network and Connection Errors
-For network-related errors:
-
-```php
-try {
-    $response = $stytch->b2b()->organizations->get('org_id');
-} catch (\RuntimeException $e) {
-    echo 'Network error: ' . $e->getMessage();
-} catch (\InvalidArgumentException $e) {
-    echo 'Invalid argument: ' . $e->getMessage();
-}
-```
-
-## Configuration Options
-
-| Option | Type | Required | Description |
-|--------|------|----------|-------------|
-| `project_id` | string | Yes | Your Stytch project ID |
-| `secret` | string | Yes | Your Stytch secret key |
-| `env` | string | No | Environment (auto-detected from project_id) |
-| `timeout` | int | No | Request timeout in seconds (default: 600) |
-| `custom_base_url` | string | No | Custom base URL for requests |
-
-### Environment Configuration
-
-The library automatically detects the environment based on your project ID:
-
-```php
-// Test environment (project-test-*)
-$stytch = new Stytch([
-    'project_id' => 'project-test-1234567890abcdef',
-    'secret' => 'secret-test-1234567890abcdef',
-]);
-// Uses: https://test.stytch.com/
-
-// Live environment (project-live-*)
-$stytch = new Stytch([
-    'project_id' => 'project-live-1234567890abcdef',
-    'secret' => 'secret-live-1234567890abcdef',
-]);
-// Uses: https://api.stytch.com/
-```
-
-### Custom Configuration
-
-```php
-// Custom timeout and base URL
-$stytch = new Stytch([
-    'project_id' => 'project-test-1234567890abcdef',
-    'secret' => 'secret-test-1234567890abcdef',
-    'timeout' => 300, // 5 minutes
-    'custom_base_url' => 'https://custom-api.example.com',
-]);
-```
-
-## Development
-
-This is an unofficial library and is not affiliated with Stytch. It's based on the official Node.js library but adapted for PHP with Guzzle HTTP client and PSR-7 compatibility.
-
-## License
-
-MIT License
