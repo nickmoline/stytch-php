@@ -24,7 +24,7 @@ jobs:
         uses: php-actions/composer@v6
         with:
           php_version: 8.3
-          php_extensions: xdebug pconv
+          php_extensions: xdebug
 
       - name: Static Analysis with PHPStan
         uses: php-actions/phpstan@v3
@@ -38,7 +38,7 @@ jobs:
         uses: php-actions/phpunit@v4
         with:
           php_version: 8.3
-          php_extensions: xdebug pconv
+          php_extensions: xdebug
           coverage_clover: coverage.xml
 
 
