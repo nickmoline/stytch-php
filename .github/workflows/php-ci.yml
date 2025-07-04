@@ -38,14 +38,25 @@ jobs:
         uses: php-actions/phpunit@v4
         with:
           coverage_clover: coverage.xml
+          log_junit: junit.xml
           bootstrap: vendor/autoload.php
           php_version: 8.3
           php_extensions: xdebug
           memory_limit: 512M
         env:
           XDEBUG_MODE: coverage
+          PROJECT_ID: ${{ secrets.STYTCH_PROJECT_ID }}
+          SECRET: ${{ secrets.STYTCH_SECRET }}
+          STYTCH_API_URL: "https://test.stytch.com"
+          RUN_INTEGRATION_TESTS: true
 
-
+      - name: Upload coverage reports to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v5.4.3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: nickmoline/stytch-php
+          files: coverage.xml, junit.xml
 
 
 
