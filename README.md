@@ -1,5 +1,5 @@
 # Stytch PHP Library
-![Packagist Version](https://img.shields.io/packagist/v/nickmoline/stytch-php) [![codecov](https://codecov.io/gh/nickmoline/stytch-php/graph/badge.svg?token=BL97SDQ720)](https://codecov.io/gh/nickmoline/stytch-php)
+[![Packagist Version](https://img.shields.io/packagist/v/nickmoline/stytch-php)](https://packagist.org/packages/nickmoline/stytch-php) [![codecov](https://codecov.io/gh/nickmoline/stytch-php/graph/badge.svg?token=BL97SDQ720)](https://codecov.io/gh/nickmoline/stytch-php)
 
 Unofficial PHP SDK for Stytch based on the Official [Stytch Node.js Library](https://github.com/stytchauth/stytch-node).
 
