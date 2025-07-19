@@ -29,23 +29,31 @@ class Sessions
     /**
      * Get a session.
      *
-     * @param string $sessionId
+     * @param string $organization_id
+     * @param string $member_id
      * @return array<string, mixed>
      */
-    public function get(string $sessionId): array
+    public function get(?string $organization_id, ?string $member_id): array
     {
-        return $this->client->get("/v1/b2b/sessions/{$sessionId}");
+        $params = [];
+        if ($organization_id) {
+            $params['organization_id'] = $organization_id;
+        }
+        if ($member_id) {
+            $params['member_id'] = $member_id;
+        }
+        return $this->client->get("/v1/b2b/sessions", $params);
     }
 
     /**
      * Revoke a session.
      *
-     * @param string $sessionId
+     * @param array contain exactly 1 of session_id, member_id, session_token, or session_jwt
      * @return array<string, mixed>
      */
-    public function revoke(string $sessionId): array
+    public function revoke(array $data): array
     {
-        return $this->client->delete("/v1/b2b/sessions/{$sessionId}");
+        return $this->client->post("/v1/b2b/sessions/revoke", $data);
     }
 
     /**
