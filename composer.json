@@ -37,6 +37,8 @@
             "Stytch\\Tests\\": "tests/"
         }
     },
+    "abandoned": "stytch/stytch-php",
+    "_comment": "This library is deprecated and will be removed in the future. Please use the official Stytch PHP SDK instead: stytch/stytch-php: https://github.com/stytchauth/stytch-php",
     "config": {
         "allow-plugins": {
             "pestphp/pest-plugin": true

@@ -1,5 +1,6 @@
-> ### Deprecation Warning
-> The Stytch Team has created an [Official PHP SDK](https://github.com/stytchauth/stytch-php) maintained by them.  As such I'm deprecating this library and encouraging everyone to move to the new official SDK
+> [!WARNING]
+> ## Deprecation Warning
+> The Stytch Team has created an [Official PHP SDK](https://github.com/stytchauth/stytch-php) maintained by them.  As such I'm deprecating this library and encouraging everyone to move to the new official SDK, please switch to the `stytch/stytch-php` package at your earliest convenience.  I will not remove this package anytime soon, but I will not be providing any further updates to this package.
 
 # Stytch PHP Library
 [![Packagist Version](https://img.shields.io/packagist/v/nickmoline/stytch-php)](https://packagist.org/packages/nickmoline/stytch-php) [![codecov](https://codecov.io/gh/nickmoline/stytch-php/graph/badge.svg?token=BL97SDQ720)](https://codecov.io/gh/nickmoline/stytch-php)
